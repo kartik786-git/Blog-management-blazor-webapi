@@ -1,0 +1,55 @@
+﻿@page "/blogdetails/{blogId:int}"
+@using BlazorAppSecure.Model
+@using BlazorAppSecure.Sevices
+
+@inject IBlogService _blogService
+@inject NavigationManager _navigation
+
+<div class="row">
+    <div class="col-md-6"><h3 class="d-inline">Blog details - Basic </h3></div>
+    <div class="col-md-6 text-end"><button class="d-inline btn btn-primary" @onclick="BackToBlogList">Back to Blog list</button></div>
+</div>
+
+
+@if (editBlog == null)
+{
+    <h1>No Blogs details found to particular blog</h1>
+}
+else
+{
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <!-- Blog Detail Content -->
+                <div class="card mt-5 ">
+                    <div class="image-container">
+                        <img src="https://kartik786-git.github.io/TestStaticPage/Courses/dotnet maui.PNG" alt="Card Image" class="card-image" />
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center">@editBlog.Name</h5>
+                        <p class="card-text">@editBlog.Description</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private BlogViewModel editBlog;
+
+    [Parameter]
+    public int blogId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        editBlog = await _blogService.GetByIdAsync(blogId);
+    }
+
+    private void BackToBlogList()
+    {
+        _navigation.NavigateTo("/blog/blogs");
+    }
+}
